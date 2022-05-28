@@ -1,3 +1,6 @@
+# Data folders
+data/breast_cancer/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
