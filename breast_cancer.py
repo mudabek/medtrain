@@ -12,7 +12,7 @@ import torch
 import pickle
 
 
-# Image transformations for model
+# Image transformations for DenseNet model
 transformations = transforms.Compose([
     transforms.ToTensor(),
     transforms.ToPILImage(),
@@ -21,10 +21,9 @@ transformations = transforms.Compose([
     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
 
-
+# Load main models
 @st.cache(allow_output_mutation=True, hash_funcs={torch.nn.parameter.Parameter: lambda parameter: parameter.data.numpy()})
 def load_models(root):
-    # C:\Users\Otabek Nazarov\Desktop\ML\kaggle\med_train\data\breast_cancer\breast_tumor_model.pkl
     # Load DenseNet-121 model
     with open(root+'breast_tumor_model.pkl', 'rb') as f:
         model = pickle.load(f)
@@ -37,6 +36,7 @@ def load_models(root):
 
     return model, gradcamplusplus
 
+# Variables for storing app persistent data
 @st.cache(persist=True, allow_output_mutation=True)
 def cached_variables():
     return {
@@ -60,6 +60,7 @@ def get_gradcam_image(image, target_categ, gradcam):
     return visualization
 
 
+# Classify image and get gradcam heatmap
 def classify_and_gradcam(image_path, model, gradcamplusplus):
     image = io.imread(image_path, as_gray=False).astype(np.float32)
     image = cv2.resize(image, (224,224), interpolation = cv2.INTER_AREA)
@@ -84,7 +85,6 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
 
 
 
-
 # Global variables
 root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
 image_names = [
@@ -100,11 +100,17 @@ if __name__ == '__main__':
 
     # Sidebar menu
     st.sidebar.header('MedtraAIn')
-    st.sidebar.subheader('Trainer for beginner medical practitioners')
     option = st.sidebar.selectbox('Select trainer', (' ', 'Chest X-Ray', 'Breast cancer'))
 
     if option == ' ':
-        print('nothing')
+        title = 'MedTrAIn'
+        intro_message = 'Trainer powered by AI for beginner medical doctors to practice their skills'
+        st.markdown(f"<h1 style='text-align: center; color: white;'>{title}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='text-align: center; color: white;'>{intro_message}</h3>", unsafe_allow_html=True)
+        landing_img_path = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\landing.jpg'
+        landing_image = io.imread(landing_img_path, as_gray=False)
+        col1, col2, col3 = st.columns([0.1,7,0.1])
+        col2.image(landing_image)
 
     elif option == 'Breast cancer':
         app_cache = cached_variables()
@@ -113,12 +119,12 @@ if __name__ == '__main__':
         st.markdown('This trainer will assist you in learning how to classify breast cancer types. Steps are following:')
         st.markdown('**1.** Given an US breast image you first classify it yourself')
         st.markdown('**2.** Our model then gives a hint for you to reconsider your decision')
-        st.markdown('**3.** You make your final choice')
+        st.markdown('**3.** You may reconsider your choice')
         st.markdown(' ')
         st.markdown(' ')
         
         # Show image          
-        dummy, col01, col02, col03 = st.columns([0.5, 0.5,2,1])
+        dummy, col01, col02, col03 = st.columns([0.5,0.5,2,1])
         
         img_path = root + image_names[app_cache['img_idx']]
         image, gradcamed_image, title_text = classify_and_gradcam(img_path, classifier_model, gradcam_model)
@@ -146,7 +152,7 @@ if __name__ == '__main__':
                 app_cache['your_answer'] = 'Normal'
         
         # Pring out result
-        dummy, col11, col12, col13 = st.columns([0.47, 1,1.05,1])
+        dummy, col11, col12, col13 = st.columns([0.47,1,1.05,1])
         if col12.button('See answer'):
             if 'benign' in img_path:
                 text_clr = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
@@ -160,17 +166,10 @@ if __name__ == '__main__':
                 st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Normal</h5>", unsafe_allow_html=True)
 
         # Switch to next image button
-        dummy, col21, col22, col23 = st.columns([0.5, 1.13,1,1])
+        dummy, col21, col22, col23 = st.columns([0.5,1.13,1,1])
         if col22.button('Next'):
             app_cache['img_idx'] = (app_cache['img_idx'] + 1) % len(image_names)
             st.experimental_rerun()
-
-
-        # st.markdown(' ')
-        # st.markdown(' ')
-        # st.markdown('Statistics:')
-        # st.markdown(f'1st attempt: {2}/{3}, 2nd attempt {3}/{3}')
-        # st.markdown(f'Benign: {1}/{1}, Malignant {1}/{1}, Normal {1}/{1}')
     
     elif option == 'Chest X-Ray':
         print('cxr')
