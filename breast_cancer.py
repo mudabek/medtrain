@@ -102,6 +102,7 @@ if __name__ == '__main__':
     st.sidebar.header('MedtraAIn')
     option = st.sidebar.selectbox('Select trainer', (' ', 'Chest X-Ray', 'Breast cancer'))
 
+    # Landing page
     if option == ' ':
         title = 'MedTrAIn'
         intro_message = 'Trainer powered by AI for beginner medical doctors to practice their skills'
@@ -112,6 +113,7 @@ if __name__ == '__main__':
         col1, col2, col3 = st.columns([0.1,7,0.1])
         col2.image(landing_image)
 
+    # Breast cancer classifier page
     elif option == 'Breast cancer':
         app_cache = cached_variables()
         # Initial text
@@ -119,7 +121,7 @@ if __name__ == '__main__':
         st.markdown('This trainer will assist you in learning how to classify breast cancer types. Steps are following:')
         st.markdown('**1.** Given an US breast image you first classify it yourself')
         st.markdown('**2.** Our model then gives a hint for you to reconsider your decision')
-        st.markdown('**3.** You may reconsider your choice')
+        st.markdown('**3.** You may change your choice')
         st.markdown(' ')
         st.markdown(' ')
         
@@ -156,14 +158,14 @@ if __name__ == '__main__':
         if col12.button('See answer'):
             if 'benign' in img_path:
                 text_clr = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
-                st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Benign</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Benign</h5>", unsafe_allow_html=True)
             elif 'malignant' in img_path:
-                st.markdown(f"<h5 style='text-align: center; color: green;'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Malignant</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Malignant</h5>", unsafe_allow_html=True)
             else:
-                st.markdown(f"<h5 style='text-align: center; color: green;'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Normal</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Normal</h5>", unsafe_allow_html=True)
 
         # Switch to next image button
         dummy, col21, col22, col23 = st.columns([0.5,1.13,1,1])
@@ -171,5 +173,6 @@ if __name__ == '__main__':
             app_cache['img_idx'] = (app_cache['img_idx'] + 1) % len(image_names)
             st.experimental_rerun()
     
+    # Chest X-ray diagnosis page
     elif option == 'Chest X-Ray':
         print('cxr')
