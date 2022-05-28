@@ -23,7 +23,7 @@ transformations = transforms.Compose([
 
 
 @st.cache(allow_output_mutation=True, hash_funcs={torch.nn.parameter.Parameter: lambda parameter: parameter.data.numpy()})
-def load_models(root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\med_train\\data\\breast_cancer\\'):
+def load_models(root):
     # C:\Users\Otabek Nazarov\Desktop\ML\kaggle\med_train\data\breast_cancer\breast_tumor_model.pkl
     # Load DenseNet-121 model
     with open(root+'breast_tumor_model.pkl', 'rb') as f:
@@ -37,9 +37,12 @@ def load_models(root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\med_train\
 
     return model, gradcamplusplus
 
-@st.cache(suppress_st_warning=True, allow_output_mutation=True)
+@st.cache(persist=True, allow_output_mutation=True)
 def cached_variables():
-    return {'img_idx': 0}
+    return {
+        'img_idx' : 0,
+        'your_answer' : '', 
+        }
 
 
 # Function to get gradcamed image
@@ -62,6 +65,7 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
     image = cv2.resize(image, (224,224), interpolation = cv2.INTER_AREA)
 
     original_image = io.imread(image_path, as_gray=False)
+    original_image = cv2.resize(original_image, (224,224), interpolation = cv2.INTER_AREA)
 
     transformed_image = transformations(image).unsqueeze(0)
     output_class = model(transformed_image).argmax().item()
@@ -82,7 +86,7 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
 
 
 # Global variables
-root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\med_train\\data\\breast_cancer\\'
+root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
 image_names = [
     'benign (1).png', 'benign (2).png', 'benign (3).png', 'malignant (1).png', 
     'malignant (2).png', 'normal (2).png', 'normal (2).png',
@@ -92,7 +96,7 @@ image_names = [
 
 if __name__ == '__main__':
     # Load models
-    classifier_model, gradcam_model = load_models()
+    classifier_model, gradcam_model = load_models(root)
 
     # Sidebar menu
     st.sidebar.header('MedtraAIn')
@@ -114,33 +118,52 @@ if __name__ == '__main__':
         st.markdown(' ')
         
         # Show image          
-        col1, col2, col3 = st.columns([0.5,2,1])
-        print(app_cache)
+        dummy, col01, col02, col03 = st.columns([0.5, 0.5,2,1])
+        
         img_path = root + image_names[app_cache['img_idx']]
         image, gradcamed_image, title_text = classify_and_gradcam(img_path, classifier_model, gradcam_model)
         
-        imageLocation = col2.empty()
+        imageLocation = col02.empty()
         imageLocation.image(image, use_column_width=True, clamp=True)
 
         # Buttons for making selection
-        benign_col, malign_col, normal_col = st.columns(3)
+        dummy_col, benign_col, malign_col, normal_col = st.columns([0.5,1,1.05,1])
 
+        # Get the answer from the user
         with benign_col:
             if st.button('Benign'):
                 imageLocation.image(gradcamed_image, use_column_width=True)
+                app_cache['your_answer'] = 'Benign'
 
         with malign_col:
             if st.button('Malignant'):
                 imageLocation.image(gradcamed_image, use_column_width=True)
+                app_cache['your_answer'] = 'Malignant'
 
         with normal_col:
             if st.button('Normal'):
                 imageLocation.image(gradcamed_image, use_column_width=True)
+                app_cache['your_answer'] = 'Normal'
         
-        # Next button
-        col11, col12, col13 = st.columns([1.13,1,1])
-        if col12.button('Next'):
+        # Pring out result
+        dummy, col11, col12, col13 = st.columns([0.47, 1,1.05,1])
+        if col12.button('See answer'):
+            if 'benign' in img_path:
+                text_clr = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Benign</h5>", unsafe_allow_html=True)
+            elif 'malignant' in img_path:
+                st.markdown(f"<h5 style='text-align: center; color: green;'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Malignant</h5>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<h5 style='text-align: center; color: green;'>Your answer: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True answer: Normal</h5>", unsafe_allow_html=True)
+
+        # Switch to next image button
+        dummy, col21, col22, col23 = st.columns([0.5, 1.13,1,1])
+        if col22.button('Next'):
             app_cache['img_idx'] = (app_cache['img_idx'] + 1) % len(image_names)
+            st.experimental_rerun()
 
 
         # st.markdown(' ')
