@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # Landing page
     if option == ' ':
         title = 'MedTrAIn'
-        intro_message = 'Trainer powered by AI for beginner medical doctors to practice their skills'
+        intro_message = 'Trainer for beginner medical doctors powered by AI'
         st.markdown(f"<h1 style='text-align: center; color: white;'>{title}</h1>", unsafe_allow_html=True)
         st.markdown(f"<h3 style='text-align: center; color: white;'>{intro_message}</h3>", unsafe_allow_html=True)
         landing_img_path = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\landing.jpg'
@@ -161,10 +161,12 @@ if __name__ == '__main__':
                 st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
                 st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Benign</h5>", unsafe_allow_html=True)
             elif 'malignant' in img_path:
-                st.markdown(f"<h5 style='text-align: center; color: green;'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                text_clr = 'green' if app_cache['your_answer'].lower() == 'malignant' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
                 st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Malignant</h5>", unsafe_allow_html=True)
             else:
-                st.markdown(f"<h5 style='text-align: center; color: green;'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                text_clr = 'green' if app_cache['your_answer'].lower() == 'normal' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
                 st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Normal</h5>", unsafe_allow_html=True)
 
         # Switch to next image button
