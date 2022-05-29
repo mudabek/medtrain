@@ -84,14 +84,12 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
     return original_image, gradcamed_image, title_text
 
 
-
 # Global variables
 root='C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
 image_names = [
     'benign (1).png', 'benign (2).png', 'benign (3).png', 'malignant (1).png', 
     'malignant (2).png', 'normal (2).png', 'normal (2).png',
     ]
-
 
 
 if __name__ == '__main__':
@@ -104,7 +102,7 @@ if __name__ == '__main__':
 
     # Landing page
     if option == ' ':
-        title = 'MedTrAIn'
+        title = 'MedtrAIn'
         intro_message = 'Trainer for beginner medical doctors powered by AI'
         st.markdown(f"<h1 style='text-align: center; color: white;'>{title}</h1>", unsafe_allow_html=True)
         st.markdown(f"<h3 style='text-align: center; color: white;'>{intro_message}</h3>", unsafe_allow_html=True)
@@ -115,7 +113,9 @@ if __name__ == '__main__':
 
     # Breast cancer classifier page
     elif option == 'Breast cancer':
+        # Load cached variables
         app_cache = cached_variables()
+
         # Initial text
         st.title('Breast cancer classification')
         st.markdown('This trainer will assist you in learning how to classify breast cancer types. Steps are following:')
