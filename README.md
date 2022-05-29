@@ -1,10 +1,8 @@
-# MedtrAIn
-## AI powered medical trainer
-### Prepared for TumarisHack
-### by From MADE to top
+# MedtrAIn - AI powered medical trainer
+## Prepared for TumarisHack by From MADE to top
 
 
-#### Running the program
+### Running the program
 1. Create new python environment
 ```
 conda env create -f requirements.yml
@@ -16,7 +14,7 @@ streamlit run medtrain.py
 ```
 
 
-#### Main libries used for software
+### Main libries used for software
 - pytorch
 - pytorch-gradcam
 - transformers (HuggingFace)
@@ -24,6 +22,6 @@ streamlit run medtrain.py
 Full list available [here](requirements.yml)
 
 
-#### Datasets
+### Datasets
 [Breast cancer data](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data).
 [Chest X-Ray reports data](https://physionet.org/content/mimic-cxr/2.0.0/)
