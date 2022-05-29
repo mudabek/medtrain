@@ -18,7 +18,7 @@ streamlit run medtrain.py
 - pytorch
 - pytorch-gradcam
 - transformers (HuggingFace)
-- streamlit
+- streamlit <br>
 Full list available [here](requirements.yml)
 
 
