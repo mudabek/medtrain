@@ -1,7 +1,7 @@
 # MedtrAIn - AI powered medical trainer
 ## Prepared for *TumarisHack* by team *From MADE to top*
 
-![Alt text](data/git_cover?raw=true "MedtrAIn")
+![MedtrAIn](data/git_cover.jpg?raw=true "MedtrAIn")
 
 
 ### Running the program
