@@ -9,7 +9,7 @@
 ```
 conda env create -f requirements.yml
 ```
-2. Place [data](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data) in data folder in root directory
+2. Place [contents](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data) in [data](data/) folder
 3. Run the following command
 ```
 streamlit run medtrain.py
