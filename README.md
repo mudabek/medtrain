@@ -6,7 +6,7 @@
 
 ### Running the program
 1. Create new python environment using packages in [file](requirements.txt) 
-2. Download [contents](https://drive.google.com/file/d/1h2KHLc_CGGMPvWkZXZgcWKscW8WF8vZp/view?usp=sharing) and place them in [data](data/) folder
+2. Download [file](https://drive.google.com/file/d/1h2KHLc_CGGMPvWkZXZgcWKscW8WF8vZp/view?usp=sharing) and export contents in [data](data/) folder
 3. Run the command below and app will run locally in the browser
 ```
 streamlit run medtrain.py
