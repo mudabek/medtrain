@@ -23,5 +23,5 @@ Full list available [here](requirements.yml)
 
 
 ### Datasets
-[Breast cancer data](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data).
-[Chest X-Ray reports data](https://physionet.org/content/mimic-cxr/2.0.0/)
+[Breast cancer ultrasound images](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data). <br>
+[Chest X-Ray reports and images](https://physionet.org/content/mimic-cxr/2.0.0/)
