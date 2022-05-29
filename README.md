@@ -1,6 +1,8 @@
 # MedtrAIn - AI powered medical trainer
 ## Prepared for *TumarisHack* by team *From MADE to top*
 
+![Alt text](data/git_cover?raw=true "MedtrAIn")
+
 
 ### Running the program
 1. Create new python environment using packages in [file](requirements.txt) 
@@ -12,7 +14,7 @@ streamlit run medtrain.py
 
 
 ### Main libries used for software
-Full list available [here](requirements.yml)
+Full list available [here](requirements.txt)
 - pytorch
 - pytorch-gradcam
 - transformers (HuggingFace)
