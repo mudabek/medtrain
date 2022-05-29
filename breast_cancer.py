@@ -245,7 +245,7 @@ if __name__ == '__main__':
         if answer:
             st.text(answer)
 
-        dummy, col21, col22, col23 = st.columns([0.5, 1.13, 1, 1])
+        col21, col22, col23 = st.columns([0.5, 1, 1])
 
         if col23.button('Show report'):
             st.markdown(f"{text}")
@@ -253,3 +253,4 @@ if __name__ == '__main__':
         if col22.button('Next'):
             app_cache['xray_idx'] = (app_cache['xray_idx'] + 1) % len(image_xray)
             st.experimental_rerun()
+            #1
