@@ -3,10 +3,10 @@ import time
 import streamlit as st
 import numpy as np
 from skimage import io
-import cv2
+# import cv2
 
 # Model related imports
-from pytorch_grad_cam.utils.image import show_cam_on_image
+# from pytorch_grad_cam.utils.image import show_cam_on_image
 import torchvision.transforms as transforms
 import torch
 import pickle
@@ -27,19 +27,18 @@ transformations = transforms.Compose([
           hash_funcs={torch.nn.parameter.Parameter: lambda parameter: parameter.data.numpy()})
 def load_models(root):
     # Load DenseNet-121 model
-    with open(root + 'breast_tumor_model.pkl', 'rb') as f:
-        model = pickle.load(f)
+    # with open(root + 'breast_tumor_model.pkl', 'rb') as f:
+    #     model = pickle.load(f)
 
-    model.eval()
+    # model.eval()
 
     # Load gradcam for XAI
-    with open(root + 'gradcam.pkl', 'rb') as f:
-        gradcamplusplus = pickle.load(f)
+    # with open(root + 'gradcam.pkl', 'rb') as f:
+    #     gradcamplusplus = pickle.load(f)
 
-    # Load x-ray model
     nlp = pipeline("multitask-qa-qg", model="valhalla/t5-base-qa-qg-hl")
 
-    return model, gradcamplusplus, nlp
+    return nlp
 
 
 # Variables for storing app persistent data
@@ -91,7 +90,7 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
 
 
 # Global variables
-root = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
+root = 'T:\\1.MUZAFFAR\\tomaris-hack\\'
 image_names = [
     'benign (1).png', 'benign (2).png', 'benign (3).png', 'malignant (1).png',
     'malignant (2).png', 'normal (2).png', 'normal (2).png',
@@ -99,6 +98,7 @@ image_names = [
 image_xray = [
     '21.png', '24.png', '29.png'
 ]
+
 texts_xray = [
     "GT report: <sos> impression pa and lateral chest compared to through at 359 pm . \
     subcutaneous emphysema in the right chest wall has diminished slightly since removal \
@@ -123,101 +123,23 @@ texts_xray = [
     status post right upper lobectomy . <eos>"
 ]
 
-
 if __name__ == '__main__':
     # Load models
-    classifier_model, gradcam_model, nlp = load_models(root)
+    # classifier_model, gradcam_model = load_models(root)
+    nlp = load_models(root)
 
     # Sidebar menu
     st.sidebar.header('MedtraAIn')
     option = st.sidebar.selectbox('Select trainer', (' ', 'Chest X-Ray', 'Breast cancer'))
-
-    # Landing page
     if option == ' ':
-        title = 'MedtrAIn'
+        title = 'Chest X-Ray'
         intro_message = 'Trainer for beginner medical doctors powered by AI'
         st.markdown(f"<h1 style='text-align: center; color: white;'>{title}</h1>", unsafe_allow_html=True)
         st.markdown(f"<h3 style='text-align: center; color: white;'>{intro_message}</h3>", unsafe_allow_html=True)
-        landing_img_path = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\landing.jpg'
+        landing_img_path = 'T:\\1.MUZAFFAR\\tomaris-hack\\kisspng-x-ray-medicine-tuberculosis-image-vector-graphics-5cb7948ad55ec0.148532061555534986874.jpg'
         landing_image = io.imread(landing_img_path, as_gray=False)
         col1, col2, col3 = st.columns([0.1, 7, 0.1])
         col2.image(landing_image)
-
-    # Breast cancer classifier page
-    elif option == 'Breast cancer':
-        # Load cached variables
-        app_cache = cached_variables()
-
-        # Initial text
-        st.title('Breast cancer classification')
-        st.markdown(
-            'This trainer will assist you in learning how to classify breast cancer types. Steps are following:')
-        st.markdown('**1.** Given an US breast image you first classify it yourself')
-        st.markdown('**2.** Our model then gives a hint for you to reconsider your decision')
-        st.markdown('**3.** You may change your choice')
-        st.markdown(' ')
-        st.markdown(' ')
-
-        # Show image          
-        dummy, col01, col02, col03 = st.columns([0.5, 0.5, 2, 1])
-
-        img_path = root + image_names[app_cache['img_idx']]
-        image, gradcamed_image, title_text = classify_and_gradcam(img_path, classifier_model, gradcam_model)
-
-        imageLocation = col02.empty()
-        imageLocation.image(image, use_column_width=True, clamp=True)
-
-        # Buttons for making selection
-        dummy_col, benign_col, malign_col, normal_col = st.columns([0.5, 1, 1.05, 1])
-
-        # Get the answer from the user
-        with benign_col:
-            if st.button('Benign'):
-                imageLocation.image(gradcamed_image, use_column_width=True)
-                app_cache['your_answer'] = 'Benign'
-
-        with malign_col:
-            if st.button('Malignant'):
-                imageLocation.image(gradcamed_image, use_column_width=True)
-                app_cache['your_answer'] = 'Malignant'
-
-        with normal_col:
-            if st.button('Normal'):
-                imageLocation.image(gradcamed_image, use_column_width=True)
-                app_cache['your_answer'] = 'Normal'
-
-        # Pring out result
-        dummy, col11, col12, col13 = st.columns([0.47, 1, 1.05, 1])
-        if col12.button('See answer'):
-            if 'benign' in img_path:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Benign</h5>",
-                            unsafe_allow_html=True)
-            elif 'malignant' in img_path:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'malignant' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Malignant</h5>",
-                            unsafe_allow_html=True)
-            else:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'normal' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Normal</h5>",
-                            unsafe_allow_html=True)
-
-        # Switch to next image button
-        dummy, col21, col22, col23 = st.columns([0.5, 1.13, 1, 1])
-        if col22.button('Next'):
-            app_cache['img_idx'] = (app_cache['img_idx'] + 1) % len(image_names)
-            st.experimental_rerun()
-
-    # Chest X-ray diagnosis page
     elif option == 'Chest X-Ray':
         app_cache = cached_variables()
         st.title('Chest X-Ray')
@@ -249,3 +171,6 @@ if __name__ == '__main__':
         if col22.button('Next'):
             app_cache['xray_idx'] = (app_cache['xray_idx'] + 1) % len(image_xray)
             st.experimental_rerun()
+
+
+
