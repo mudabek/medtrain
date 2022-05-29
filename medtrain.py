@@ -136,7 +136,7 @@ if __name__ == '__main__':
     # Landing page
     if option == ' ':
         title = 'MedtrAIn'
-        intro_message = 'Trainer for beginner medical doctors powered by AI'
+        intro_message = 'Trainer powered by AI for aspiring medical doctors '
         st.markdown(f"<h1 style='text-align: center; color: white;'>{title}</h1>", unsafe_allow_html=True)
         st.markdown(f"<h3 style='text-align: center; color: white;'>{intro_message}</h3>", unsafe_allow_html=True)
         landing_img_path = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\landing.jpg'
@@ -223,7 +223,12 @@ if __name__ == '__main__':
     # Chest X-ray diagnosis page
     elif option == 'Chest X-Ray':
         app_cache = cached_variables()
-        st.title('Chest X-Ray')
+        st.title('Chest X-Ray question answering')
+        # Initial text
+        # st.markdown(
+        #     'This trainer will assist you in practicing chest X-ray diagnosis.')
+        # st.markdown('**1.** Test your hypothesis by asking questions and AI will answer you')
+        # st.markdown('**2.** In the end you can see the whole report')
         st.markdown(' ')
         st.markdown(' ')
 
