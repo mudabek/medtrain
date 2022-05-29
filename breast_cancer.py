@@ -91,42 +91,43 @@ def classify_and_gradcam(image_path, model, gradcamplusplus):
 
 
 # Global variables
-root = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
+breast_root = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\breast_cancer\\'
+xray_root = 'C:\\Users\\Otabek Nazarov\\Desktop\\ML\\kaggle\\medtrain\\data\\xray\\'
 image_names = [
-    'benign (1).png', 'benign (2).png', 'benign (3).png', 'malignant (1).png',
+    'benign (1).png', 'malignant (1).png', 'benign (2).png', 'benign (3).png',
     'malignant (2).png', 'normal (2).png', 'normal (2).png',
 ]
 image_xray = [
     '21.png', '24.png', '29.png'
 ]
 texts_xray = [
-    "GT report: <sos> impression pa and lateral chest compared to through at 359 pm . \
+    "Impression pa and lateral chest compared to through at 359 pm . \
     subcutaneous emphysema in the right chest wall has diminished slightly since removal \
     of the right pleural tube . there is still a small pocket of air and fluid , or clot \
     in the right upper chest alongside the surgical rib fracture . right lung is diffusely \
     edematous , perhaps from hilar lymphatic or venous congestion . left lung is hyperinflated \
     due to emphysema and clear of any focal abnormality . the heart is normal size . fullness in \
     the postoperative right hilus has improved since . lateral view shows persistence of an anterior \
-    air and fluid collection , which on the frontal view is at the level of the third anterior interspace . <eos>",
+    air and fluid collection , which on the frontal view is at the level of the third anterior interspace .",
 
-    "GT report: <sos> comparison is made with prior study performed a day earlier . interstitial opacities \
+    "Comparison is made with prior study performed a day earlier . interstitial opacities \
     in the right lung have minimally increased , likely due to edema . in the right upper hemithorax several \
     air-fluid levels are more conspicuous than in prior studies . right perihilar opacity is grossly unchanged , \
     allowing the difference in position of the patient . the left lung is clear . the right chest tube remains in \
-    unchanged position . right chest wall subcutaneous emphysema has improved . <eos>",
+    unchanged position . right chest wall subcutaneous emphysema has improved .",
 
-    "GT report: <sos> findings ap single view of the chest has been obtained with patient in sitting semi-upright \
+    "Findings ap single view of the chest has been obtained with patient in sitting semi-upright \
     position . comparison is made with the next preceding similar study obtained four hours earlier during the same \
     day . again identified is status post right upper lobectomy with moderately elevated right-sided diaphragm and \
     local chest wall emphysema in the right shoulder area . no pneumothorax has developed since the preceding study , \
     and no new infiltrates are seen . impression stable chest findings as seen on portable followup examination , \
-    status post right upper lobectomy . <eos>"
+    status post right upper lobectomy ."
 ]
 
 
 if __name__ == '__main__':
     # Load models
-    classifier_model, gradcam_model, nlp = load_models(root)
+    classifier_model, gradcam_model, nlp = load_models(breast_root)
 
     # Sidebar menu
     st.sidebar.header('MedtraAIn')
@@ -161,7 +162,7 @@ if __name__ == '__main__':
         # Show image          
         dummy, col01, col02, col03 = st.columns([0.5, 0.5, 2, 1])
 
-        img_path = root + image_names[app_cache['img_idx']]
+        img_path = breast_root + image_names[app_cache['img_idx']]
         image, gradcamed_image, title_text = classify_and_gradcam(img_path, classifier_model, gradcam_model)
 
         imageLocation = col02.empty()
@@ -190,26 +191,28 @@ if __name__ == '__main__':
         dummy, col11, col12, col13 = st.columns([0.47, 1, 1.05, 1])
         if col12.button('See answer'):
             if 'benign' in img_path:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Benign</h5>",
-                            unsafe_allow_html=True)
+                text_color = 'green' if app_cache['your_answer'].lower() == 'benign' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_color};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Benign</h5>", unsafe_allow_html=True)
+                if text_color == 'red':
+                    st.markdown('A benign tumor has distinct, smooth, regular borders. \
+                        A benign tumor can become quite large, but it will not invade nearby \
+                        tissue or spread to other parts of your body.')
             elif 'malignant' in img_path:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'malignant' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Malignant</h5>",
-                            unsafe_allow_html=True)
+                text_color = 'green' if app_cache['your_answer'].lower() == 'malignant' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_color};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Malignant</h5>", unsafe_allow_html=True)
+                if text_color == 'red':
+                    st.markdown('A malignant tumor has irregular borders and grows faster than a benign tumor. \
+                        A malignant tumor can also spread to other parts of your body.')
             else:
-                text_clr = 'green' if app_cache['your_answer'].lower() == 'normal' else 'red'
-                st.markdown(
-                    f"<h5 style='text-align: center; color: {text_clr};'>Your diagnosis: {app_cache['your_answer']}</h5>",
-                    unsafe_allow_html=True)
-                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Normal</h5>",
-                            unsafe_allow_html=True)
+                text_color = 'green' if app_cache['your_answer'].lower() == 'normal' else 'red'
+                st.markdown(f"<h5 style='text-align: center; color: {text_color};'>Your diagnosis: {app_cache['your_answer']}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; color: green;'>True diagnosis: Normal</h5>", unsafe_allow_html=True)
+                if text_color == 'red':
+                    st.markdown('No visual evidence of tumor detected. \
+                        Biomarkers are specific biological mechanisms and entities that may \
+                        indicate existence of cancer through presence or activity. Additional research may be required.')
 
         # Switch to next image button
         dummy, col21, col22, col23 = st.columns([0.5, 1.13, 1, 1])
@@ -227,7 +230,7 @@ if __name__ == '__main__':
         dummy, col01, col02, col03 = st.columns([0.5, 0.5, 4, 1])
 
         landing_img_path = image_xray[app_cache['xray_idx']]
-        landing_image = io.imread(landing_img_path, as_gray=False)
+        landing_image = io.imread(xray_root + landing_img_path, as_gray=False)
         imageLocation = col02.empty()
         imageLocation.image(landing_image, use_column_width=True, clamp=True)
 
@@ -253,4 +256,3 @@ if __name__ == '__main__':
         if col22.button('Next'):
             app_cache['xray_idx'] = (app_cache['xray_idx'] + 1) % len(image_xray)
             st.experimental_rerun()
-            #1
