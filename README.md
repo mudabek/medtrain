@@ -1,5 +1,5 @@
 # MedtrAIn - AI powered medical trainer
-## Prepared for TumarisHack by From MADE to top
+## Prepared for *TumarisHack* by team *From MADE to top*
 
 
 ### Running the program
