@@ -3,23 +3,21 @@
 
 
 ### Running the program
-1. Create new python environment
-```
-conda env create -f requirements.yml
-```
-2. Place [contents](https://drive.google.com/file/d/1h2KHLc_CGGMPvWkZXZgcWKscW8WF8vZp/view?usp=sharing) in [data](data/) folder
-3. Run the following command
+1. Create new python environment using packages in [file](requirements.txt) 
+2. Download [contents](https://drive.google.com/file/d/1h2KHLc_CGGMPvWkZXZgcWKscW8WF8vZp/view?usp=sharing) and place them in [data](data/) folder
+3. Run the command below and app will run locally in the browser
 ```
 streamlit run medtrain.py
 ```
 
 
 ### Main libries used for software
+Full list available [here](requirements.yml)
 - pytorch
 - pytorch-gradcam
 - transformers (HuggingFace)
 - streamlit <br>
-Full list available [here](requirements.yml)
+
 
 
 ### Datasets
