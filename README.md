@@ -1,5 +1,5 @@
 # MedtrAIn - AI powered medical trainer
-## Prepared for *TumarisHack* by team *From MADE to top*
+## Award winning project at **TumarisHack**
 
 ![MedtrAIn](data/git_cover.jpg?raw=true "MedtrAIn")
 
@@ -25,3 +25,6 @@ Full list available [here](requirements.txt)
 ### Datasets
 [Breast cancer ultrasound images](https://www.kaggle.com/code/tanvirrahmanornob/breast-cancer-detection/data) <br>
 [Chest X-Ray reports and images](https://physionet.org/content/mimic-cxr/2.0.0/)
+
+### Demo
+[Link to demo video](https://drive.google.com/file/d/1QDEIIYKn__mKU_BXDoYwbnwEyitb811m/view?resourcekey)
