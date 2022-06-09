@@ -1,5 +1,5 @@
 # MedtrAIn - AI powered medical trainer
-## Award winning project at **TumarisHack**
+## Award winning project at *TumarisHack*
 
 ![MedtrAIn](data/git_cover.jpg?raw=true "MedtrAIn")
 
